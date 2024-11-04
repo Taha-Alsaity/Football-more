@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style/csss/layout.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=El+Messiri:wght@500&family=Indie+Flower&family=Kalam&family=Kanit&family=Readex+Pro&family=Righteous&family=Sansita&family=Sixtyfour+Convergence&family=Sofia+Sans+Semi+Condensed:wght@500&family=Ysabeau+Office:wght@300&display=swap" rel="stylesheet"> <title>Document</title>
+
+    <style>
+
+    </style>
+</head>
+<body >
+
+    <header id="head1" >
+      <div  id="hdiv" style="    ">
+        
+        
+        <nav class="nav1" style=""><h1 style=" color: rgb(186, 185, 185);"><span style=" letter-spacing: 2px; color: blue;"> F</span>MORE <sub style="color: greenyellow;">+</sub></h1></nav>
+
+        <nav class="nav2" style=""><a href=""><i style="  color: rgba(53, 126, 68, 0.912);" class="fa-solid fa-address-card"></i></a><a href=""><i style="color: rgba(53, 60, 126, 0.912);" class="fa-brands fa-x-twitter"></i></a><a href=""><i style="color: rgba(53, 60, 126, 0.912); font-weight: 600;" class="fa-brands fa-instagram"></i></a></nav>
+      
+      </div>
+      <div style="width: 100%; height: 87%; background-color: rgba(255, 0, 0, 0);"></div>
+     </header>
+     
+    <section style="padding: 10px;">
+     <h1 class="h11" style=" color: rgb(71, 71, 71);
+          font-family: 'Righteous', serif;
+  font-weight: 400;
+  font-style: normal;
+       text-align: center;">UE<span style="color: rgb(49, 148, 49);">F</span>A Champions league standings</h1>
+    <section style=" overflow-x: scroll; width: 100%; " class="wrapper">
+        <!-- Row title -->
+        <main class="row title">
+          <ul > <li id="li-1"  style=" ">Team</li>
+            <li style="font-size: 15px; font-weight: 600;"></li>
+           
+            <li style="">Played</li>
+            <li style=""> Win</li>
+            <li style="">Draw</li>
+            <li style="">Lose</li>
+            <li style="">PTS</li>
+            <li style="">G<span style="color: rgb(30, 255, 30);">/</span>D</li>
+          </ul>
+        </main>
+        <!-- Row 1 - fadeIn -->
+ <section id="standing">     
+
+        </section>
+      </section>
+      </section>
+      <script >
+        document.addEventListener("DOMContentLoaded", () => {
+    getstanding();
+});
+ 
+
+  const baseUrl = "https://api.football-data.org/v4/competitions/2001";
+  const token = "82816c50ca6f4473b82ec09aeeece761";
+  function getstanding(){
+    const url = `${baseUrl}/standings`;
+    axios.get(url,{
+      headers: {
+        "X-Auth-Token":token
+
+      },
+      
+
+    })
+    .then((response) => {
+      console.log(response.data);
+      const standings = response.data.standings;
+      document.getElementById("standing").innerHTML = "";
+       let tableContent = "";
+      for( standing of standings){
+       
+        const tables = standing.table;
+        for(table of tables){
+          let content = "";
+
+                                  if(table.position <= 8){
+                                 content = `
+                                  
+                                          <article style="border-left:5px solid rgb(65, 200, 39) ;" class="row  ">
+                                    <ul >
+                                    
+                                      <li><img src="${table.team.crest}" width="25"></li>
+                                      <li  ><a style="color: rgb(30, 255, 30);" href="#">${table.team.tla}</a></li>
+                                      <li>${table.playedGames}</li>
+                                      <li>${table.won}</li>
+                                      <li>${table.draw}</li>
+                                      <li>${table.lost}</li>
+                                      <li>${table.points}</li>
+                                      <li>${table.goalDifference}</li>
+                                    </ul>
+                            
+                                  </article>`;
+                                }else if(table.position > 8 && table.position <= 24){
+                                 content = `
+                                  
+                                  <article style="border-left:5px solid orange;" class="row  ">
+                            <ul >
+                            
+                              <li><img src="${table.team.crest}" width="25"></li>
+                              <li  ><a style="color: orange;" href="#">${table.team.tla}</a></li>
+                              <li>${table.playedGames}</li>
+                              <li>${table.won}</li>
+                              <li>${table.draw}</li>
+                              <li>${table.lost}</li>
+                              <li>${table.points}</li>
+                              <li>${table.goalDifference}</li>
+                            </ul>
+
+                          </article>`;
+                                }else{
+                                  content = `
+                                  
+                                  <article style="border-left:5px solid red" class="row  ">
+                            <ul >
+                            
+                              <li><img src="${table.team.crest}" width="25"></li>
+                              <li  ><a style="color: rgb(255, 74, 83);" href="#">${table.team.tla}</a></li>
+                              <li>${table.playedGames}</li>
+                              <li>${table.won}</li>
+                              <li>${table.draw}</li>
+                              <li>${table.lost}</li>
+                              <li>${table.points}</li>
+                              <li>${table.goalDifference}</li>
+                            </ul>
+
+                          </article>`;
+                                }
+
+        tableContent += content;
+      }
+      }
+      document.getElementById("standing").innerHTML = tableContent;
+    })
+    .catch((error) => {
+                console.error('Error fetching standings:', error);
+            });
+        }
+
+        // Call getstanding() once the DOM is fully loaded
+       
+  
+</script>
+<script>
+  
+  window.addEventListener("scroll", () => {
+        const hdiv = document.getElementById("hdiv");
+        
+        if (window.scrollY > 50) {
+            hdiv.style.transform = 'translateY(-100%) translateX(-50%)';
+            hdiv.style.transition= '0.1s';
+            hdiv.style.top= '0px';
+ // Hide when scrolled down more than 10px
+        } else {
+            hdiv.style.transform = 'translateY(0) translateX(-50%)';
+            hdiv.style.transition= '0.1s';
+            hdiv.style.top = '10px'
+            // Show when scrolled up within 10px of the top
+        }
+    });
+
+ 
+</script>
+</body>
+
+</html>
