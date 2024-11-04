@@ -26,12 +26,17 @@ SECRET_KEY = 'django-insecure-i=7p&x90p8#@4%kxv*l&n0+-_7jo=me4%_69&ffrtg69#9!!q@
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8090",
+    "https://football-more.up.railway.app",
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'champapp',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -112,6 +117,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+# settings.py
+import os
+if os.getenv("RAILWAY_ENVIRONMENT") is None:  # or another way to check if running locally
+    from dotenv import load_dotenv
+    load_dotenv()
+API_TOKEN = os.getenv("API_TOKEN")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
